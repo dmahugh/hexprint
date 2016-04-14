@@ -40,31 +40,30 @@ def hexdump(filename=None, offset=0, totbytes=0):
     """
     bytes_printed = 0
 
-    file_size = os.stat(filename).st_size
     fhandle = open(filename, 'rb')
     if offset < 0:
         # negative offset is from end of file
         fhandle.seek(offset, 2)
-        # file_position = the true offset of starting byte (from beginning of file)
-        file_position = file_size + offset
-        row_offset = 16 * (file_position//16) # offset to first byte in current row
+        file_size = os.stat(filename).st_size
+        true_offset = file_size + offset # offset from beginning of file
     else:
         # positive offset is from beginning of file
         fhandle.seek(offset)
-        row_offset = 16 * (offset//16) # offset to first byte in current row
+        true_offset = offset
 
     row_string = '' # the displayed string version of this row (printed on the right)
     row_values = 0 # number of hex values printed so far on current row
+    row_offset = 16 * (offset//16) # offset to first byte in current row
 
     click.echo('-'*75)
     click.echo(click.style(filename, fg='green'))
     click.echo(11*'-' + '0--1--2--3--4--5--6--7--8--9--A--B--C--D--E--F' + 18*'-')
 
-    if offset % 16 != 0:
+    if true_offset % 16 != 0:
         # not starting at the beginning of a row
         click.echo(format("%0.8X" % row_offset) + '  ', nl=False)
         row_string = ''
-        for _ in range(offset % 16):
+        for _ in range(true_offset % 16):
             row_string += ' '
             click.echo(' '*3, nl=False)
             row_values += 1
