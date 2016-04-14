@@ -3,6 +3,7 @@
 cli() -----------> Handle command-line arguments.
 hexdump() -------> Display hex dump to the console.
 """
+import os
 import sys
 
 #------------------------------------------------------------------------------
@@ -21,9 +22,10 @@ def cli():
     if len(sys.argv) < 2:
         print('Syntax --> hexprint filename offset nbytes (offset/nbytes are optional)')
         return
+
     filename = sys.argv[1]
-    offset = 0 if len(sys.argv) == 2 else int(sys.argv[2])
-    totbytes = 0 if len(sys.argv) == 3 else int(sys.argv[3])
+    offset = 0 if len(sys.argv) < 3 else int(sys.argv[2])
+    totbytes = 0 if len(sys.argv) < 4 else int(sys.argv[3])
     hexdump(filename=filename, offset=offset, totbytes=totbytes)
 
 #------------------------------------------------------------------------------
@@ -31,20 +33,30 @@ def hexdump(filename=None, offset=0, totbytes=0):
     """Hex dump utility, with output format similar to DOS debug.
 
     filename = filename
-    offset = offset (of first byte to display)
+    offset = offset (of first byte to display); if negative, offset is from EOF
     totbytes = total # bytes to display (0=all)
     """
     bytes_printed = 0
 
+    file_size = os.stat(filename).st_size
     fhandle = open(filename, 'rb')
-    fhandle.seek(offset)
-    row_offset = 16 * (offset//16) # the file offset for first byte in current row
+    if offset < 0:
+        # negative offset is from end of file
+        fhandle.seek(offset, 2)
+        # file_position = the true offset of starting byte (from beginning of file)
+        file_position = file_size + offset
+        row_offset = 16 * (file_position//16) # offset to first byte in current row
+    else:
+        # positive offset is from beginning of file
+        fhandle.seek(offset)
+        row_offset = 16 * (offset//16) # offset to first byte in current row
+
     row_string = '' # the displayed string version of this row (printed on the right)
     row_values = 0 # number of hex values printed so far on current row
 
     print('-'*75)
     print(filename)
-    print('-'*75)
+    print(11*'-' + '0--1--2--3--4--5--6--7--8--9--A--B--C--D--E--F' + 18*'-')
 
     if offset % 16 != 0:
         # not starting at the beginning of a row
