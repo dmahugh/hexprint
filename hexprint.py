@@ -55,13 +55,17 @@ def hexdump(filename=None, offset=0, totbytes=0):
     row_values = 0 # number of hex values printed so far on current row
     row_offset = 16 * (offset//16) # offset to first byte in current row
 
-    click.echo('-'*75)
-    click.echo(click.style(filename, fg='green'))
-    click.echo(11*'-' + '0--1--2--3--4--5--6--7--8--9--A--B--C--D--E--F' + 18*'-')
+    click.echo(click.style('-'*75, fg='blue'))
+    click.echo(filename)
+    click.echo(click.style(9*'-', fg='blue'), nl=False)
+    for col_offset in range(16):
+        click.echo(click.style('--', fg='blue'), nl=False)
+        click.echo(click.style(hex(col_offset)[2].upper(), fg='green'), nl=False)
+    click.echo(click.style(18*'-', fg='blue'))
 
     if true_offset % 16 != 0:
         # not starting at the beginning of a row
-        click.echo(format("%0.8X" % row_offset) + '  ', nl=False)
+        click.echo(click.style(format("%0.8X" % row_offset) + '  ', fg='green'), nl=False)
         row_string = ''
         for _ in range(true_offset % 16):
             row_string += ' '
@@ -71,7 +75,7 @@ def hexdump(filename=None, offset=0, totbytes=0):
     while True:
 
         if fhandle.tell() % 16 == 0:
-            click.echo(format("%0.8X" % row_offset) + '  ', nl=False)
+            click.echo(click.style(format("%0.8X" % row_offset) + '  ', fg='green'), nl=False)
             row_values = 0
 
         nextbyte = fhandle.read(1)
@@ -86,7 +90,7 @@ def hexdump(filename=None, offset=0, totbytes=0):
             row_string += '.'
 
         if fhandle.tell() % 16 == 0:
-            click.echo(click.style(' ' + row_string, fg='green'))
+            click.echo(' ' + row_string)
             row_offset += 16
             row_string = ''
             row_values = 0
@@ -100,7 +104,7 @@ def hexdump(filename=None, offset=0, totbytes=0):
     # need to print blanks for missing hex values and then print row_string
     if row_values < 16:
         click.echo('   '*(16-row_values) + ' ', nl=False)
-        click.echo(click.style(row_string, fg='green'))
+        click.echo(row_string)
 
     fhandle.close()
     return bytes_printed
