@@ -7,7 +7,7 @@ setup(
     version='1.0',
     py_modules=['hexprint'],
     install_requires=[
-        'Click',
+        'Click', 'Colorama',
     ],
     entry_points='''
         [console_scripts]

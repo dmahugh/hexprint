@@ -57,7 +57,7 @@ def hexdump(filename=None, offset=0, totbytes=0):
     row_values = 0 # number of hex values printed so far on current row
 
     click.echo('-'*75)
-    click.echo(filename)
+    click.echo(click.style(filename, fg='green'))
     click.echo(11*'-' + '0--1--2--3--4--5--6--7--8--9--A--B--C--D--E--F' + 18*'-')
 
     if offset % 16 != 0:
@@ -87,7 +87,7 @@ def hexdump(filename=None, offset=0, totbytes=0):
             row_string += '.'
 
         if fhandle.tell() % 16 == 0:
-            click.echo(' ' + row_string)
+            click.echo(click.style(' ' + row_string, fg='green'))
             row_offset += 16
             row_string = ''
             row_values = 0
@@ -100,7 +100,8 @@ def hexdump(filename=None, offset=0, totbytes=0):
     # if the final row is a partial (contains less than 16 values), then
     # need to print blanks for missing hex values and then print row_string
     if row_values < 16:
-        click.echo('   '*(16-row_values) + ' ' + row_string)
+        click.echo('   '*(16-row_values) + ' ', nl=False)
+        click.echo(click.style(row_string, fg='green'))
 
     fhandle.close()
     return bytes_printed
