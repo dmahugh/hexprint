@@ -15,3 +15,5 @@ filename.txt
 ```
 Only simple ASCII characters are displayed in the column to the right. All other characters are displayed as a period (.).
 
+## dependencies
+Hexprint uses the [click](https://pypi.python.org/pypi/click) module. See [setup.py](https://github.com/dmahugh/hexprint/blob/master/setup.py).
