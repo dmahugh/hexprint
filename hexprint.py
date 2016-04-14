@@ -53,7 +53,7 @@ def hexdump(filename=None, offset=0, totbytes=0):
 
     row_string = '' # the displayed string version of this row (printed on the right)
     row_values = 0 # number of hex values printed so far on current row
-    row_offset = 16 * (offset//16) # offset to first byte in current row
+    row_offset = 16 * (true_offset//16) # offset to first byte in current row
 
     click.echo(click.style('-'*75, fg='blue'))
     click.echo(filename)
