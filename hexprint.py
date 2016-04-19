@@ -9,26 +9,14 @@ import sys
 import click
 
 #------------------------------------------------------------------------------
-def cli():
+@click.command()
+@click.argument('file')
+@click.option('--nbytes', default=0, help='Number of bytes to display (0=all).')
+@click.option('--offset', default=0, help='Offset of first byte to display.')
+def cli(file, offset, nbytes):
     """Command-line wrapper for hexdump() function.
-
-    Handles these command-line arguments:
-    1st argument = filename
-    2nd argument = offset of first byte to display (default = 0)
-    3rd argument = # bytes to display (default = 0 = entire file)
-
-    Displays a hex dump of the specified portion of the specified file.
     """
-
-    # note that sys.argv[0] is the name of the script, so we start at argv[1]
-    if len(sys.argv) < 2:
-        click.echo('Syntax --> hexprint filename offset nbytes (offset/nbytes are optional)')
-        return
-
-    filename = sys.argv[1]
-    offset = 0 if len(sys.argv) < 3 else int(sys.argv[2])
-    totbytes = 0 if len(sys.argv) < 4 else int(sys.argv[3])
-    hexdump(filename=filename, offset=offset, totbytes=totbytes)
+    hexdump(filename=file, offset=offset, totbytes=nbytes)
 
 #------------------------------------------------------------------------------
 def hexdump(filename=None, offset=0, totbytes=0):
@@ -60,12 +48,12 @@ def hexdump(filename=None, offset=0, totbytes=0):
     click.echo(click.style(9*'-', fg='blue'), nl=False)
     for col_offset in range(16):
         click.echo(click.style('--', fg='blue'), nl=False)
-        click.echo(click.style(hex(col_offset)[2].upper(), fg='green'), nl=False)
+        click.echo(click.style(hex(col_offset)[2].upper(), fg='cyan'), nl=False)
     click.echo(click.style(18*'-', fg='blue'))
 
     if true_offset % 16 != 0:
         # not starting at the beginning of a row
-        click.echo(click.style(format("%0.8X" % row_offset) + '  ', fg='green'), nl=False)
+        click.echo(click.style(format("%0.8X" % row_offset) + '  ', fg='cyan'), nl=False)
         row_string = ''
         for _ in range(true_offset % 16):
             row_string += ' '
@@ -75,7 +63,7 @@ def hexdump(filename=None, offset=0, totbytes=0):
     while True:
 
         if fhandle.tell() % 16 == 0:
-            click.echo(click.style(format("%0.8X" % row_offset) + '  ', fg='green'), nl=False)
+            click.echo(click.style(format("%0.8X" % row_offset) + '  ', fg='cyan'), nl=False)
             row_values = 0
 
         nextbyte = fhandle.read(1)

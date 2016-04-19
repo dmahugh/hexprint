@@ -1,5 +1,6 @@
 # don't include these files
 _todo.txt
+Hexprint.egg-info/
 
 # don't include these subfolders
 __pycache__/
