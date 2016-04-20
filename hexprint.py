@@ -36,7 +36,7 @@ def hexdump(filename=None, offset=0, totbytes=0):
     try:
         fhandle = open(filename, 'rb')
     except PermissionError:
-        click.echo(click.style('Can not open file: ' + str(filename), fg='red'))
+        click.echo(click.style('Can not open file: ' + click.format_filename(filename), fg='red'))
         return
 
     if offset < 0:
