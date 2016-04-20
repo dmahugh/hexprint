@@ -12,9 +12,9 @@ import click
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('file', type=click.Path(exists=True))
-@click.option('--nbytes', default=0,
+@click.option('-n', '--nbytes', default=0,
               help='Number of bytes to display (0=all).', metavar='<int>')
-@click.option('--offset', default=0,
+@click.option('-o', '--offset', default=0,
               help='Offset of first byte; negative values are relative to EOF.',
               metavar='<int>')
 @click.version_option(version='1.0', prog_name='Hexprint')
