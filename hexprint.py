@@ -11,8 +11,11 @@ import click
 #------------------------------------------------------------------------------
 @click.command()
 @click.argument('file')
-@click.option('--nbytes', default=0, help='Number of bytes to display (0=all).')
-@click.option('--offset', default=0, help='Offset of first byte; negative values are relative to EOF.')
+@click.option('--nbytes', default=0,
+              help='Number of bytes to display (0=all).', metavar='<int>')
+@click.option('--offset', default=0,
+              help='Offset of first byte; negative values are relative to EOF.',
+              metavar='<int>')
 @click.version_option(version='1.0', prog_name='Hexprint')
 def cli(file, offset, nbytes):
     """Display hex dump of the contents of FILE.
@@ -102,7 +105,3 @@ def hexdump(filename=None, offset=0, totbytes=0):
 
     fhandle.close()
     return bytes_printed
-
-#------------------------------------------------------------------------------
-if __name__ == "__main__":
-    cli()
