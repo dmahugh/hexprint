@@ -12,9 +12,10 @@ import click
 @click.command()
 @click.argument('file')
 @click.option('--nbytes', default=0, help='Number of bytes to display (0=all).')
-@click.option('--offset', default=0, help='Offset of first byte to display.')
+@click.option('--offset', default=0, help='Offset of first byte; negative values are relative to EOF.')
+@click.version_option(version='1.0', prog_name='Hexprint')
 def cli(file, offset, nbytes):
-    """Command-line wrapper for hexdump() function.
+    """Display hex dump of the contents of FILE.
     """
     hexdump(filename=file, offset=offset, totbytes=nbytes)
 
@@ -28,7 +29,12 @@ def hexdump(filename=None, offset=0, totbytes=0):
     """
     bytes_printed = 0
 
-    fhandle = open(filename, 'rb')
+    try:
+        fhandle = open(filename, 'rb')
+    except PermissionError:
+        click.echo(click.style('Can not open file: ' + str(filename), fg='red'))
+        return
+
     if offset < 0:
         # negative offset is from end of file
         fhandle.seek(offset, 2)
