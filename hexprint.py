@@ -11,7 +11,7 @@ import click
 #------------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.argument('file')
+@click.argument('file', type=click.Path(exists=True))
 @click.option('--nbytes', default=0,
               help='Number of bytes to display (0=all).', metavar='<int>')
 @click.option('--offset', default=0,
