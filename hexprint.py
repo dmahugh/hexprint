@@ -19,12 +19,17 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
               metavar='<int>')
 @click.version_option(version='1.0', prog_name='Hexprint')
 def cli(file, offset, nbytes):
-    """Display hex dump of the contents of FILE.
+    """\b
+    _______________
+     |___|___|___|
+       |___|___|        Print hex dump of file contents.
+         |___|
+           |
     """
     hexdump(filename=file, offset=offset, totbytes=nbytes)
 
 #------------------------------------------------------------------------------
-def hexdump(filename=None, offset=0, totbytes=0):
+def hexdump(*, filename=None, offset=0, totbytes=0):
     """Hex dump utility, with output format similar to DOS debug.
 
     filename = filename
