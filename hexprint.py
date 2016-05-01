@@ -4,7 +4,6 @@ cli() -----------> Handle command-line arguments.
 hexdump() -------> Display hex dump to the console.
 """
 import os
-import sys
 
 import click
 
@@ -13,9 +12,11 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('file', type=click.Path(exists=True))
 @click.option('-n', '--nbytes', default=0,
-              help='Number of bytes to display (0=all).', metavar='<int>')
+              help='Number of bytes to display. ' +
+              '0 (default) = display entire file.', metavar='<int>')
 @click.option('-o', '--offset', default=0,
-              help='Offset of first byte; negative values are relative to EOF.',
+              help='Offset of first byte to display. ' +
+              'Negative offsets are relative to end of file. default = 0.',
               metavar='<int>')
 @click.version_option(version='1.0', prog_name='Hexprint')
 def cli(file, offset, nbytes):
