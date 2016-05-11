@@ -9,8 +9,8 @@ import click
 
 #------------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
-@click.command(context_settings=CONTEXT_SETTINGS)
-@click.argument('file', type=click.Path(exists=True))
+@click.command(context_settings=CONTEXT_SETTINGS, options_metavar='<options>')
+@click.argument('file', type=click.Path(exists=True), metavar="file")
 @click.option('-n', '--nbytes', default=0,
               help='Number of bytes to display. ' +
               '0 (default) = display entire file.', metavar='<int>')
@@ -22,9 +22,9 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 def cli(file, offset, nbytes):
     """\b
     _______________
-     |___|___|___|
-       |___|___|        Print hex dump of file contents.
-         |___|
+     |___|___|___|      file = file to read and display
+       |___|___|
+         |___|          Prints hex dump of file contents.
            |
     """
     hexdump(filename=file, offset=offset, totbytes=nbytes)
