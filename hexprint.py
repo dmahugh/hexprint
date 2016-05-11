@@ -22,10 +22,9 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 def cli(file, offset, nbytes):
     """\b
     _______________
-     |___|___|___|      file = file to read and display
-       |___|___|
-         |___|          Prints hex dump of file contents.
-           |
+    - - - - - - - -      file = file to read and display
+    ---------------
+    - - - - - - - -      Prints hex dump of file contents.
     """
     hexdump(filename=file, offset=offset, totbytes=nbytes)
 
