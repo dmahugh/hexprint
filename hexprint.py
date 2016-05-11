@@ -21,11 +21,11 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 @click.version_option(version='1.0', prog_name='Hexprint')
 def cli(file, offset, nbytes):
     """\b
-    -+---+---+---+-
-     | 1 | 2 | 3 |    file = file to read and display
-    -+---+---+---+-
-     | A | B | C |    Prints hex dump of file contents.
-    -+---+---+---+-
+    ---------------
+     | ? | ? | ? |      file = file to read and display
+    ---------------
+     | ? | ? | ? |      Prints hex dump of file contents.
+    ---------------
     """
     hexdump(filename=file, offset=offset, totbytes=nbytes)
 
