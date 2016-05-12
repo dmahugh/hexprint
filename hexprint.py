@@ -12,11 +12,11 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 @click.command(context_settings=CONTEXT_SETTINGS, options_metavar='<options>')
 @click.argument('file', type=click.Path(exists=True), metavar="file")
 @click.option('-n', '--nbytes', default=0,
-              help='Number of bytes to display. ' +
-              '0 (default) = display entire file.', metavar='<int>')
+              help='# bytes to display. ' +
+              'default = 0 (entire file)', metavar='<int>')
 @click.option('-o', '--offset', default=0,
-              help='Offset of first byte to display. ' +
-              'Negative offsets are relative to end of file. default = 0.',
+              help='Offset of first byte (default=0). ' +
+              'Negative values are relative to end of file.',
               metavar='<int>')
 @click.version_option(version='1.0', prog_name='Hexprint')
 def cli(file, offset, nbytes):
