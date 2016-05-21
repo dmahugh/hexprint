@@ -1,11 +1,13 @@
 """Hex dump utility, with output format similar to DOS debug.
 
-cli() -----------> Handle command-line arguments.
-hexdump() -------> Display hex dump to the console.
+cli() ------------> Handle command-line arguments.
+hexdump() --------> Display hex dump to the console.
+test_cli_help() --> Test the --help option.
 """
 import os
 
 import click
+from click.testing import CliRunner
 
 #------------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -112,3 +114,17 @@ def hexdump(*, filename=None, offset=0, totbytes=0):
 
     fhandle.close()
     return bytes_printed
+
+#------------------------------------------------------------------------------
+def test_cli_help():
+    """Test the --help option.
+    """
+    runner = CliRunner()
+    result = runner.invoke(cli, ['--help'])
+    assert result.exit_code == 0
+    assert result.output.startswith('Usage: cli <options> file\n')
+    print(result.output)
+
+# code to execute when running standalone: -------------------------------------
+if __name__ == '__main__':
+    test_cli()
