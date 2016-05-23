@@ -5,6 +5,8 @@ from setuptools import setup
 setup(
     name='Hexprint',
     version='1.0',
+    license='MIT License',
+    author='Doug Mahugh',
     py_modules=['hexprint'],
     install_requires=[
         'Click', 'Colorama',
