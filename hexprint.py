@@ -131,7 +131,7 @@ def test_cli_values():
     """
     tempfilename = next(tempfile._get_candidate_names()) + '.tmp'
     with open(tempfilename, 'w') as fhandle:
-        fhandle.write('This is a test') # write temporary test file
+        fhandle.write('This is a test.') # write temporary test file
 
     runner = CliRunner()
     result = runner.invoke(cli, [tempfilename])
@@ -140,7 +140,7 @@ def test_cli_values():
     # get the first (and only) line of hex data in the output
     outputdata = result.output.split('\n')[3]
     assert outputdata == \
-        '00000000  54 68 69 73 20 69 73 20-61 20 74 65 73 74        This is a test'
+        '00000000  54 68 69 73 20 69 73 20-61 20 74 65 73 74 2E     This is a test.'
 
     os.remove(tempfilename) # delete the temporary test file
 
