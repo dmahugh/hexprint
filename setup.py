@@ -9,7 +9,7 @@ setup(
     author='Doug Mahugh',
     py_modules=['hexprint'],
     install_requires=[
-        'Click', 'Colorama',
+        'Click', 'Colorama', 'pytest',
     ],
     entry_points='''
         [console_scripts]
