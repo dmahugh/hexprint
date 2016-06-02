@@ -129,18 +129,30 @@ def test_cli_help():
 def test_cli_values():
     """Test reading values from a tempfile with known contents.
     """
+
+    testcases = [ \
+        ['00000000  54 68 69 73 20 69 73 20-61 20 74 65 73 74 2E     This is a test.'],
+        ['00000000  54 68 69 73 20                                   This ', '-n5'],
+        ['00000000                 69 73 20-61 20 74 65 73 74 2E          is a test.', '-o5'],
+        ['00000000        69 73 20 69 73                               is is', '-o2', '-n5'],
+        ['00000000                    73 20-61 20 74                       s a t', '-o-9', '-n5']]
+
+    # write temporary test file
     tempfilename = next(tempfile._get_candidate_names()) + '.tmp'
     with open(tempfilename, 'w') as fhandle:
-        fhandle.write('This is a test.') # write temporary test file
+        fhandle.write('This is a test.')
 
     runner = CliRunner()
-    result = runner.invoke(cli, [tempfilename])
-    assert result.exit_code == 0
 
-    # get the first (and only) line of hex data in the output
-    outputdata = result.output.split('\n')[3]
-    assert outputdata == \
-        '00000000  54 68 69 73 20 69 73 20-61 20 74 65 73 74 2E     This is a test.'
+    for testcase in testcases:
+        if len(testcase) <= 1:
+            args = [tempfilename]
+        else:
+            args = [tempfilename, *testcase[1:]]
+        print(args)
+        result = runner.invoke(cli, args)
+        assert result.exit_code == 0
+        assert result.output.split('\n')[3] == testcase[0]
 
     os.remove(tempfilename) # delete the temporary test file
 
