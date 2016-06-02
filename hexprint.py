@@ -1,8 +1,11 @@
 """Hex dump utility, with output format similar to DOS debug.
 
-cli() ------------> Handle command-line arguments.
-hexdump() --------> Display hex dump to the console.
-test_cli_help() --> Test the --help option.
+cli() --------------> Handle command-line arguments.
+hexdump() ----------> Display hex dump to the console.
+TempTestFile -------> Context manager class for creating temporary test files.
+test_cli_help() ----> Test the --help option.
+test_cli_values() --> Test displaying values from a temporary test file.
+
 """
 import os
 import tempfile
@@ -117,6 +120,27 @@ def hexdump(*, filename=None, offset=0, totbytes=0):
     return bytes_printed
 
 #------------------------------------------------------------------------------
+class TempTestFile:
+    """Context manager class for creating temporary test files.
+
+    with TempTestFile(contents) as fname:
+        # file fname now exists, with specified contents
+        # on exit, fname is deleted
+    """
+    def __init__(self, contents):
+        self.contents = contents
+        self.filename = next(tempfile._get_candidate_names()) + '.tmp'
+    def __enter__(self):
+        with open(self.filename, 'w') as fhandle:
+            fhandle.write(self.contents)
+        return self.filename
+    def __exit__(self, etype, value, traceback):
+        os.remove(self.filename) # delete the temp file on exit
+    def __repr__(self):
+        return '<' + (self.__class__.__name__ + ' object, filename = ' +
+                      self.filename + '>')
+
+#------------------------------------------------------------------------------
 def test_cli_help():
     """Test the --help option.
     """
@@ -137,20 +161,13 @@ def test_cli_values():
         ['00000000        69 73 20 69 73                               is is', '-o2', '-n5'],
         ['00000000                    73 20-61 20 74                       s a t', '-o-9', '-n5']]
 
-    # write temporary test file
-    tempfilename = next(tempfile._get_candidate_names()) + '.tmp'
-    with open(tempfilename, 'w') as fhandle:
-        fhandle.write('This is a test.')
-
-    runner = CliRunner()
-
-    for testcase in testcases:
-        args = [tempfilename, *testcase[1:]] if len(testcase) > 1 else [tempfilename]
-        result = runner.invoke(cli, args)
-        assert result.exit_code == 0
-        assert result.output.split('\n')[3] == testcase[0]
-
-    os.remove(tempfilename) # delete the temporary test file
+    with TempTestFile('This is a test.') as tempfilename:
+        runner = CliRunner()
+        for testcase in testcases:
+            args = [tempfilename, *testcase[1:]] if len(testcase) > 1 else [tempfilename]
+            result = runner.invoke(cli, args)
+            assert result.exit_code == 0
+            assert result.output.split('\n')[3] == testcase[0]
 
 # code to execute when running standalone: -------------------------------------
 if __name__ == '__main__':
