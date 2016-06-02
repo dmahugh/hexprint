@@ -143,6 +143,12 @@ class TempTestFile:
 #------------------------------------------------------------------------------
 def test_cli_help():
     """Test the --help option.
+
+    NOTE: we assume in this test that the "Usage" line's command verb will not
+    include a "-setup.py" suffix, which appears (erroneously) on Windows by
+    default. So this test will only pass on Linux (e.g., Debian on Travis-CI)
+    or on a Windows machine that has the Click module patched to correct this
+    issue.
     """
     runner = CliRunner()
     result = runner.invoke(cli, ['--help'])
