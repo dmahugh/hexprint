@@ -1,6 +1,6 @@
 # don't include these files
 _todo.txt
-Hexprint.egg-info/
+*.egg-info/
 *.tmp
 
 # don't include these subfolders
