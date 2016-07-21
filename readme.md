@@ -1,4 +1,4 @@
-# hexprint - hex-dump tool
+﻿# hexprint - hex-dump tool
 This is a simple hex-dump utility, with an output format similar to the old DEBUG.EXE program that shipped with MS-DOS.
 
 I wrote it because I wanted a quick simple manual tool for viewing bytes at a specified offset from the beginning or end of a file when I was working on code to [navigate JPEG segments](https://github.com/dmahugh/jpeg-segments). If you want to edit the hex contents of a file, check out the excellent [hexdump](https://pypi.python.org/pypi/hexdump) package, and if you want to do hex dumps programmatically in Python you may find the standard library's [bin2ascii](https://docs.python.org/3/library/binascii.html) module useful.
@@ -28,3 +28,6 @@ Hexprint uses these module:
 * [Colorama](https://pypi.python.org/pypi/colorama)
 
 See [setup.py](https://github.com/dmahugh/hexprint/blob/master/setup.py).
+
+Hexprint uses Travis-CI for automated tests. Tests are run for all code changes pushed to this repo.
+
