@@ -48,7 +48,8 @@ def hexdump(*, filename=None, offset=0, totbytes=0):
     try:
         fhandle = open(filename, 'rb')
     except PermissionError:
-        click.echo(click.style('Can not open file: ' + click.format_filename(filename), fg='red'))
+        click.echo(click.style('Can not open file: ' +\
+            click.format_filename(filename), fg='red'))
         return
 
     if offset < 0:
@@ -61,7 +62,7 @@ def hexdump(*, filename=None, offset=0, totbytes=0):
         fhandle.seek(offset)
         true_offset = offset
 
-    row_string = '' # the displayed string version of this row (printed on the right)
+    row_string = '' # string version of this row (printed on the right)
     row_values = 0 # number of hex values printed so far on current row
     row_offset = 16 * (true_offset//16) # offset to first byte in current row
 
@@ -75,7 +76,8 @@ def hexdump(*, filename=None, offset=0, totbytes=0):
 
     if true_offset % 16 != 0:
         # not starting at the beginning of a row
-        click.echo(click.style(format("%0.8X" % row_offset) + '  ', fg='cyan'), nl=False)
+        click.echo(click.style(format("%0.8X" % row_offset) + '  ', fg='cyan'),
+                   nl=False)
         row_string = ''
         for _ in range(true_offset % 16):
             row_string += ' '
@@ -85,7 +87,9 @@ def hexdump(*, filename=None, offset=0, totbytes=0):
     while True:
 
         if fhandle.tell() % 16 == 0:
-            click.echo(click.style(format("%0.8X" % row_offset) + '  ', fg='cyan'), nl=False)
+            click.echo(
+                click.style(format("%0.8X" % row_offset) + '  ', fg='cyan'),
+                nl=False)
             row_values = 0
 
         nextbyte = fhandle.read(1)
