@@ -174,7 +174,8 @@ def test_cli_values():
     with TempTestFile('This is a test.') as tempfilename:
         runner = CliRunner()
         for testcase in testcases:
-            args = [tempfilename, *testcase[1:]] if len(testcase) > 1 else [tempfilename]
+            args = [tempfilename, *testcase[1:]] if len(testcase) > 1 \
+                else [tempfilename]
             result = runner.invoke(cli, args)
             assert result.exit_code == 0
             assert result.output.split('\n')[3] == testcase[0]
