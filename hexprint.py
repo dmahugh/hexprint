@@ -5,7 +5,6 @@ hexdump() ----------> Display hex dump to the console.
 TempTestFile -------> Context manager class for creating temporary test files.
 test_cli_help() ----> Test the --help option.
 test_cli_values() --> Test displaying values from a temporary test file.
-
 """
 import os
 import tempfile
@@ -13,7 +12,6 @@ import tempfile
 import click
 from click.testing import CliRunner
 
-#------------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 @click.command(context_settings=CONTEXT_SETTINGS, options_metavar='<options>')
 @click.argument('file', type=click.Path(exists=True), metavar="file")
@@ -25,7 +23,7 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
               'Negative values are relative to end of file.',
               metavar='<int>')
 @click.version_option(version='1.0', prog_name='Hexprint')
-def cli(file, offset, nbytes):
+def cli(file, offset, nbytes): #---------------------------------------------<<<
     """\b
     ---------------
      | ? | ? | ? |      file = file to read and display
@@ -35,8 +33,7 @@ def cli(file, offset, nbytes):
     """
     hexdump(filename=file, offset=offset, totbytes=nbytes)
 
-#------------------------------------------------------------------------------
-def hexdump(*, filename=None, offset=0, totbytes=0):
+def hexdump(*, filename=None, offset=0, totbytes=0): #-----------------------<<<
     """Hex dump utility, with output format similar to DOS debug.
 
     filename = filename
@@ -123,8 +120,7 @@ def hexdump(*, filename=None, offset=0, totbytes=0):
     fhandle.close()
     return bytes_printed
 
-#------------------------------------------------------------------------------
-class TempTestFile:
+class TempTestFile: #--------------------------------------------------------<<<
     """Context manager class for creating temporary test files.
 
     with TempTestFile(contents) as fname:
@@ -144,8 +140,7 @@ class TempTestFile:
         return '<' + (self.__class__.__name__ + ' object, filename = ' +
                       self.filename + '>')
 
-#------------------------------------------------------------------------------
-def test_cli_help():
+def test_cli_help(): #-------------------------------------------------------<<<
     """Test the --help option.
 
     NOTE: we assume in this test that the "Usage" line's command verb will not
@@ -159,8 +154,7 @@ def test_cli_help():
     assert result.exit_code == 0
     assert result.output.startswith('Usage: cli <options> file\n')
 
-#------------------------------------------------------------------------------
-def test_cli_values():
+def test_cli_values(): #-----------------------------------------------------<<<
     """Test reading values from a tempfile with known contents.
     """
 
@@ -180,6 +174,6 @@ def test_cli_values():
             assert result.exit_code == 0
             assert result.output.split('\n')[3] == testcase[0]
 
-# code to execute when running standalone: -------------------------------------
+# code to execute when running standalone
 if __name__ == '__main__':
     test_cli_values()
