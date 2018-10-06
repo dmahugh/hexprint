@@ -6,3 +6,4 @@ _todo.txt
 # don't include these subfolders
 __pycache__/
 .cache/
+.pytest_cache/
