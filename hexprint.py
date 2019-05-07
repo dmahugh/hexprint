@@ -1,5 +1,7 @@
-"""Hex dump utility, with output format similar to DOS debug.
+"""Hex dump utility, with output format similar to DOS's debug.exe
 """
+from __future__ import annotations
+
 import os
 import tempfile
 
@@ -27,7 +29,7 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
     metavar="<int>",
 )
 @click.version_option(version="1.0", prog_name="Hexprint")
-def cli(file, offset, nbytes):
+def cli(file: str, offset: int, nbytes: int) -> None:
     """\b
     ---------------
      | ? | ? | ? |      file = file to read and display
@@ -35,17 +37,24 @@ def cli(file, offset, nbytes):
      | ? | ? | ? |      Prints hex dump of file contents.
     ---------------
     """
+    # The docstring above is used by Click in the help screen.
+
     hexdump(filename=file, offset=offset, totbytes=nbytes)
 
 
-def hexdump(*, filename=None, offset=0, totbytes=0):
-    """Hex dump utility, with output format similar to DOS debug.
+def hexdump(*, filename: str, offset: int = 0, totbytes: int = 0) -> int:
+    """Prints bytes from a file to the console, with output format similar
+    to the DOS debug command.
 
-    filename = filename
-    offset = offset (of first byte to display); if negative, offset is from EOF
-    totbytes = total # bytes to display (0=all)
+    Args:
+        filename: name of the file
+        offset: offset of first byte to display; if negative, offset is from EOF
+        totbytes: total number of bytes to display (0=all)
+
+    Returns:
+        None
     """
-    bytes_printed = 0
+    bytes_printed: int = 0
 
     try:
         fhandle = open(filename, "rb")
@@ -57,19 +66,20 @@ def hexdump(*, filename=None, offset=0, totbytes=0):
         )
         return 0
 
+    true_offset: int
     if offset < 0:
         # negative offset is from end of file
         fhandle.seek(offset, 2)
-        file_size = os.stat(filename).st_size
+        file_size: int = os.stat(filename).st_size
         true_offset = file_size + offset  # offset from beginning of file
     else:
         # positive offset is from beginning of file
         fhandle.seek(offset)
         true_offset = offset
 
-    row_string = ""  # string version of this row (printed on the right)
-    row_values = 0  # number of hex values printed so far on current row
-    row_offset = 16 * (true_offset // 16)  # offset to first byte in current row
+    row_string: str = ""  # string version of this row (printed on the right)
+    row_values: int = 0  # number of hex values printed so far on current row
+    row_offset: int = 16 * (true_offset // 16)  # offset to first byte in current row
 
     click.echo(click.style("-" * 75, fg="blue"))
     click.echo(filename)
@@ -98,7 +108,7 @@ def hexdump(*, filename=None, offset=0, totbytes=0):
             )
             row_values = 0
 
-        nextbyte = fhandle.read(1)
+        nextbyte: bytes = fhandle.read(1)
         if len(nextbyte) != 1:
             break
 
@@ -139,8 +149,8 @@ class TempTestFile:
     """
 
     def __init__(self, contents):
-        self.contents = contents
-        self.filename = next(tempfile._get_candidate_names()) + ".tmp"
+        self.contents: str = contents
+        self.filename: str = next(tempfile._get_candidate_names()) + ".tmp"
 
     def __enter__(self):
         with open(self.filename, "w") as fhandle:
@@ -156,7 +166,7 @@ class TempTestFile:
         )
 
 
-def test_cli_help():
+def test_cli_help() -> None:
     """Test the --help option.
 
     NOTE: we assume in this test that the "Usage" line's command verb will not
